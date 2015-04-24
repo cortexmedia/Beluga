@@ -69,7 +69,7 @@ run_ssh_command() {
         echo "YOU NEED TO SPECIFY A SSH COMMAND"
         exit 1
     else
-        ssh "$DOCKER_USER@$SERVER_IP $1"
+        ssh "$DOCKER_USER@$SERVER_IP" $1
     fi
 }
 

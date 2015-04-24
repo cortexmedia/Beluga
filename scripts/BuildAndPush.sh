@@ -20,10 +20,8 @@
 #########################################################################
 set -e
 
-BASE_DIR=$( cd "../$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-
-. "$BASE_DIR/ContainerInfos.cfg"
-. "$BASE_DIR/lib/BelugaDeployLib.sh"
+. "./BelugaFile"
+. "$BASE_DIR/../lib/BelugaDeployLib.sh"
 
 ####################
 # MAIN APP RUNTIME

@@ -15,7 +15,21 @@
 # author    Mathieu Rhéaume
 #######################################################################
 set -e
-BASE_DIR=$( cd "../$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+set_base_directory() {
+    SOURCE="${BASH_SOURCE[0]}"
+    while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+      TARGET="$(readlink "$SOURCE")"
+      if [[ $SOURCE == /* ]]; then
+        SOURCE="$TARGET"
+      else
+        DIR="$( dirname "$SOURCE" )"
+        SOURCE="$DIR/$TARGET" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+      fi
+    done
+
+    export BASE_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+}
 
 show_help() {
     echo "Copyright (c) 2015 Cortex (cortex.bz)"
@@ -28,16 +42,29 @@ show_help() {
 ####################
 # MAIN APP RUNTIME #
 ####################
+set_base_directory
+
 for i in "$@"
 do
 case $i in
-  -b=*|--build=*)
-    "$BASE_DIR/scripts/BuildDockerImagesAndPushToRepos.sh"
+  -b|-b=*|--build|--build=*)
+    "$BASE_DIR/../scripts/BuildAndPush.sh"
     exit 0
     shift
     ;;
-  -p=*|--pull=*)
-    "$BASE_DIR/scripts/PushToDevelopment.sh"
+  -p=*|-p|--pull|--pull=*)
+    "$BASE_DIR/../scripts/Pull.sh"
+    exit 0
+    shift
+    ;;
+  -d=*|-d|--deploy|--deploy=*)
+    "$BASE_DIR/../scripts/BuildAndPush.sh"
+    if [ $? -ne 0 ]; then
+      echo "The build failed."
+      exit 1
+    else
+      "$BASE_DIR/../scripts/Pull.sh"
+    fi
     exit 0
     shift
     ;;
