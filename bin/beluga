@@ -28,15 +28,18 @@ set_base_directory() {
       fi
     done
 
-    export BASE_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    BASE_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    export BASE_DIR
 }
 
 show_help() {
     echo "Copyright (c) 2015 Cortex (cortex.bz)"
     echo "Beluga (0.0.1-alpha). Usage :"
     echo "beluga [--build args] [--deploy args]"
-    echo "-b Build the docker container and push to repository"
+    echo "-b Build the docker container and push to repository."
     echo "-p Connects via ssh to remote host and pulls the images."
+    echo "-d Runs the build push and pull options."
+    echo "-c Connects via ssh and removed all unused tags and containers."
 }
 
 ####################
@@ -54,6 +57,11 @@ case $i in
     ;;
   -p=*|-p|--pull|--pull=*)
     "$BASE_DIR/../scripts/Pull.sh"
+    exit 0
+    shift
+    ;;
+  -c|-c=*|--clean|--clean=*)
+    "$BASE_DIR/../scripts/Clean.sh"
     exit 0
     shift
     ;;
