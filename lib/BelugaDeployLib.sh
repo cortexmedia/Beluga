@@ -27,22 +27,44 @@ ELOCALIMAGE=0
 EDOCKERFILE=1
 EDOCKERIMAGENAME=2
 
-##########################################
-# Function: stop_and_build_containers()
-# Description : This stops the running
-# containers and tries to build them if needed
-##########################################
-stop_and_build_containers() {
-    run_ssh_command "cd $APP_DIRECTORY; docker-compose -f $DOCKER_COMPOSE_FILE stop; docker-compose -f $DOCKER_COMPOSE_FILE build "
+################################################
+# Function: remove_untagged_containers()       #
+# Description : Remove the untagged containers #
+################################################
+remove_untagged_containers() {
+  # Print containers using untagged images: $1 is used with awk's print: 0=line, 1=column 1.
+  # NOTE: "[0-9a-f]{12}" does not work with GNU Awk 3.1.7 (RHEL6).
+  run_ssh_command "docker ps -a | tail -n +2 | awk '\$2 ~ \"^[0-9a-f]+$\" {print \$1}' | xargs --no-run-if-empty docker rm"
 }
 
-##########################################
-# Function: start_containers_in_background()
-# Description : This starts the containers in
-# background.
-##########################################
+################################################
+# Function: remove_untagged_images()           #
+# Description : Remove the untagged images     #
+################################################
+remove_untagged_images() {
+  # Print untagged images: $1 is used with awk's print: 0=line, 3=column 3.
+  # NOTE: intermediate images (via -a) seem to only cause
+  # "Error: Conflict, foobarid wasn't deleted" messages.
+  # Might be useful sometimes when Docker messed things up?!
+  run_ssh_command "docker images | tail -n +2 | awk '\$1 == \"<none>\" {print \$3}' | xargs --no-run-if-empty docker rmi"
+}
+
+################################################
+# Function: stop_and_build_containers()        #
+# Description : This stops the running         #
+# containers and tries to build them if needed #
+################################################
+stop_and_build_containers() {
+  run_ssh_command "cd $APP_DIRECTORY; docker-compose -f $DOCKER_COMPOSE_FILE stop; docker-compose -f $DOCKER_COMPOSE_FILE build "
+}
+
+################################################
+# Function: start_containers_in_background()   #
+# Description : This starts the containers in  #
+# background.                                  #
+################################################
 start_containers_in_background() {
-    run_ssh_command "cd $APP_DIRECTORY; docker-compose -f $DOCKER_COMPOSE_FILE up -d "
+  run_ssh_command "cd $APP_DIRECTORY; docker-compose -f $DOCKER_COMPOSE_FILE up -d "
 }
 
 ################################################
@@ -51,9 +73,9 @@ start_containers_in_background() {
 # containers and tries to build them if needed #
 ################################################
 rotate_containers() {
-    echo "Rotating docker-compose containers"
-    stop_and_build_containers
-    start_containers_in_background
+  echo "Rotating docker-compose containers"
+  stop_and_build_containers
+  start_containers_in_background
 }
 
 #############################################
@@ -64,13 +86,13 @@ rotate_containers() {
 # Arg 1 : Command to run                    #
 #############################################
 run_ssh_command() {
-    if [ -z "$1" ]
-    then
-        echo "YOU NEED TO SPECIFY A SSH COMMAND"
-        exit 1
-    else
-        ssh "$DOCKER_USER@$SERVER_IP" $1
-    fi
+  if [ -z "$1" ]
+  then
+    echo "YOU NEED TO SPECIFY A SSH COMMAND"
+    exit 1
+  else
+    ssh "$DOCKER_USER@$SERVER_IP" $1
+  fi
 }
 
 ##############################################
@@ -81,13 +103,13 @@ run_ssh_command() {
 # Arg 1 : Container name                     #
 ##############################################
 pull_docker_image() {
-    if [ -z "$1" ]
-    then
-        echo "YOU NEED TO SPECIFY A CONTAINER NAME"
-        exit 1
-    else
-        run_ssh_command "docker pull $1:latest"
-    fi
+  if [ -z "$1" ]
+  then
+    echo "YOU NEED TO SPECIFY A CONTAINER NAME"
+    exit 1
+  else
+    run_ssh_command "docker pull $1:latest"
+  fi
 }
 
 #############################################
@@ -96,7 +118,7 @@ pull_docker_image() {
 #               target machine              #
 #############################################
 sync_app_files() {
-    rsync -r -v . "$SERVER_USER@$SERVER_IP:$APP_DIRECTORY"
+  rsync -r -v . "$SERVER_USER@$SERVER_IP:$APP_DIRECTORY"
 }
 
 ##################################################################
@@ -124,19 +146,19 @@ clean_untagged_images() {
 # Arg 2 : Recipe folder
 #################################################
 build_docker_image() {
-    if [ -z "$1" ] || [ -z "$2" ]
-    then
-        echo "You need to specify a container name and receipe folder"
-        exit 1
+  if [ -z "$1" ] || [ -z "$2" ]
+  then
+    echo "You need to specify a container name and receipe folder"
+    exit 1
+  else
+    docker build -t "$1" "$2"
+    if [ $? -ne 0 ]; then
+      echo "Docker build failed. Check your stuff mang or ask Chuck Norris"
+      exit 1
     else
-        docker build -t "$1" "$2"
-         if [ $? -ne 0 ]; then
-                echo "Docker build failed. Check your stuff mang or ask Chuck Norris"
-                exit 1
-        else
-            echo "Just build $1 with $2"
-       fi
-   fi
+      echo "Just build $1 with $2"
+    fi
+  fi
 }
 
 #################################################
@@ -148,19 +170,19 @@ build_docker_image() {
 # Arg 2 : Docker tag name
 #################################################
 tag_docker_image() {
-    if [ -z "$1" ] || [ -z "$2" ]
-    then
-        echo "You need to specify a container name and tag name"
-        exit 1
+  if [ -z "$1" ] || [ -z "$2" ]
+  then
+    echo "You need to specify a container name and tag name"
+    exit 1
+  else
+    docker tag -f "$1" "$2"
+    if [ $? -ne 0 ]; then
+      echo "Docker tag failed. Check your stuff mang or ask Chuck Norris."
+      exit 1
     else
-        docker tag -f "$1" "$2"
-        if [ $? -ne 0 ]; then
-                echo "Docker tag failed. Check your stuff mang or ask Chuck Norris."
-                exit 1
-        else
-            echo "Just tagged $1 with $2"
-       fi
+      echo "Just tagged $1 with $2"
     fi
+  fi
 }
 
 #################################################
@@ -171,20 +193,20 @@ tag_docker_image() {
 # Arg 2 : Docker container name
 #################################################
 push_docker_image() {
-    if [ -z "$1" ] || [ -z "$2" ]
-    then
-        echo "You need to specify a container name and repository"
-        exit 1
+  if [ -z "$1" ] || [ -z "$2" ]
+  then
+    echo "You need to specify a container name and repository"
+    exit 1
+  else
+    docker push "$1/$2"
+    if [ $? -ne 0 ]; then
+      echo "Docker push failed. Check your stuff mang or ask Chuck Norris."
+      exit 1
     else
-        docker push "$1/$2"
-        if [ $? -ne 0 ]; then
-                echo "Docker push failed. Check your stuff mang or ask Chuck Norris."
-                exit 1
-        else
-            echo "Just pushed $1 to $2"
-       fi
-
+      echo "Just pushed $1 to $2"
     fi
+
+  fi
 }
 
 #################################################
@@ -196,15 +218,15 @@ push_docker_image() {
 # Arg 2 : Index of item you want
 #################################################
 get_config_parameter() {
-    if [ -z "$1" ] || [ -z "$2" ]
-    then
-        echo "You need to specify a configuration index and item index"
-        exit 1
-    else
-        imageConfig=$1
-        IFS=$ARRAY_DELIMITER read -a parsedconfig <<< "$imageConfig"
-        echo "${parsedconfig[$2]}"
-    fi
+  if [ -z "$1" ] || [ -z "$2" ]
+  then
+    echo "You need to specify a configuration index and item index"
+    exit 1
+  else
+    imageConfig=$1
+    IFS=$ARRAY_DELIMITER read -a parsedconfig <<< "$imageConfig"
+    echo "${parsedconfig[$2]}"
+  fi
 }
 
 #################################################
@@ -212,13 +234,13 @@ get_config_parameter() {
 # Description : Build the docker images
 #################################################
 build_images() {
-   echo "Building images"
-   for i in "${IMAGES_TO_BUILD[@]}"
-    do
-        imageToBuild=$(get_config_parameter "$i" $ELOCALIMAGE)
-        dockerFile=$(get_config_parameter "$i" $EDOCKERFILE)
-        build_docker_image "$imageToBuild" "$dockerFile"
-    done
+  echo "Building images"
+  for i in "${IMAGES_TO_BUILD[@]}"
+  do
+    imageToBuild=$(get_config_parameter "$i" $ELOCALIMAGE)
+    dockerFile=$(get_config_parameter "$i" $EDOCKERFILE)
+    build_docker_image "$imageToBuild" "$dockerFile"
+  done
 }
 
 #################################################
@@ -226,14 +248,14 @@ build_images() {
 # Description : Tags the docker images
 #################################################
 tag_images() {
-   echo "Tagging images"
-   for i in "${IMAGES_TO_BUILD[@]}"
-    do
-        imageToBuild=$(get_config_parameter "$i" $ELOCALIMAGE)
-        dockerFile=$(get_config_parameter "$i" $EDOCKERIMAGENAME)
-        dockerTag=$REPOSITORY_URL"/"$dockerFile
-        tag_docker_image "$imageToBuild" "$dockerTag"
-    done
+  echo "Tagging images"
+  for i in "${IMAGES_TO_BUILD[@]}"
+  do
+    imageToBuild=$(get_config_parameter "$i" $ELOCALIMAGE)
+    dockerFile=$(get_config_parameter "$i" $EDOCKERIMAGENAME)
+    dockerTag=$REPOSITORY_URL"/"$dockerFile
+    tag_docker_image "$imageToBuild" "$dockerTag"
+  done
 }
 
 #################################################
@@ -241,12 +263,12 @@ tag_images() {
 # Description : Pushes the docker images to repository
 #################################################
 push_images() {
-   echo "Pushing images"
-   for i in "${IMAGES_TO_BUILD[@]}"
-    do
-        dockerFile=$(get_config_parameter "$i" $EDOCKERIMAGENAME)
-        push_docker_image "$REPOSITORY_URL" "$dockerFile"
-    done
+  echo "Pushing images"
+  for i in "${IMAGES_TO_BUILD[@]}"
+  do
+    dockerFile=$(get_config_parameter "$i" $EDOCKERIMAGENAME)
+    push_docker_image "$REPOSITORY_URL" "$dockerFile"
+  done
 }
 
 #################################################
@@ -254,12 +276,12 @@ push_images() {
 # Description : Pulls the docker images to the target server from private repository
 #################################################
 pull_images() {
-   echo "Pulling images"
-   for i in "${IMAGES_TO_BUILD[@]}"
-    do
-        dockerFile=$(get_config_parameter "$i" $EDOCKERIMAGENAME)
-        dockerTag=$REPOSITORY_URL"/"$dockerFile
-        pull_docker_image "$dockerTag"
-    done
+  echo "Pulling images"
+  for i in "${IMAGES_TO_BUILD[@]}"
+  do
+    dockerFile=$(get_config_parameter "$i" $EDOCKERIMAGENAME)
+    dockerTag=$REPOSITORY_URL"/"$dockerFile
+    pull_docker_image "$dockerTag"
+  done
 }
 
