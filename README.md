@@ -1,8 +1,5 @@
 **Beluga Deploy**
 
-** You know what it is **
-Mostly a scavenge of bash scripts used to deploy docker containers of single-node configuration in Amazon EC2.
-
 ** What it's meant to solve **
   - Run dockerfiles to build them
   - Push them to repository
@@ -14,13 +11,20 @@ Mostly a scavenge of bash scripts used to deploy docker containers of single-nod
 
 ** How stuff works **
 
-  - BelugaLib.sh contains all the functions used to build docker containers and deploy them
-  - PushToDevelopment.sh Basically pulls the images and start your stuff.
-  - BuildDockerImagesAndPushToRepos.sh Builds the docker containers and send them to Cortex's private repository
-
+  - scripts/ contains all the functions used to build docker containers and deploy them
+  - bin/beluga Contains the CLI to call the various scripts.
+  
+** Usage **
+Copyright (c) 2015 Cortex (cortex.bz)
+Beluga (0.0.1-alpha). Usage :
+beluga [--build args] [--deploy args]
+-b Build the docker container and push to repository.
+-p Connects via ssh to remote host and pulls the images.
+-d Runs the build push and pull options.
+-c Connects via ssh and removed all unused tags and containers.
 
 ** Configuration file structure **
-Configuration related to deployment is stored in ContainerInfos.cfg
+Configuration related to deployment is stored in BelugaFile
 
 The structure used to grab all the infos related to a container is
 
@@ -32,4 +36,12 @@ Per example
 
 IMAGES_TO_BUILD[0]="mrheaume/sample_project_web;.;sample_project_web"
 IMAGES_TO_BUILD[1]="mrheaume/sample_project_db;DockerPostgres/;sample_project_db"
-IMAGES_TO_BUILD[2]="mrheaume/sample_project_nginx;DockerNginx/;sample_project_nginx"
+IMAGES_TO_BUILD[2]="mrheaume/sample_project_nginx;DockerNginx/;sample_project_nginx”
+** Contributing **
+The project is currently verified with Shellcheck for bash compatibility (http://www.shellcheck.net/).
+Feel free to open Pull Request if you have awesome ideas for improvements or fixes to bugs.
+
+** Main repo maintainers **
+Mathieu Rhéaume <mrheaume@cortex.bz>
+??
+??
