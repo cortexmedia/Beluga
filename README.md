@@ -9,13 +9,12 @@
 ** What do I need to use it **
   - A Unix compatible system with RSync, SSH, Docker Compose, and obviously, Docker..
 
-** How Belugastuff works **
+** How Beluga works **
 
-  - Sscripts/ contains all the functions used to build docker containers and deploy them
+  - scripts/ contains all the functions used to build docker containers and deploy them
   - bin/beluga Contains the CLI to call the various scripts.
-Ensuite?
-sample/ Example of BelugaFile.
-lib/ Common functions used by the various deployment scripts.
+  - sample/ Example of BelugaFile.
+  - lib/ Common functions used by the various deployment scripts.
 
 ** Usage **
 Copyright (c) 2015 Cortex (cortex.bz)
@@ -30,7 +29,7 @@ beluga [--build args] [--deploy args]
 ** Configuration file structure **
 Configuration related to deployment is stored in BelugaFile
 
-The structure used to grab all the infos related to a container is ???
+The structure used to grab all the infos related to a container is
 
 * "LocalImageName;DockerFilePath;DockerImageName"
 
@@ -42,11 +41,9 @@ IMAGES_TO_BUILD[0]="mrheaume/sample_project_web;.;sample_project_web"
 IMAGES_TO_BUILD[1]="mrheaume/sample_project_db;DockerPostgres/;sample_project_db"
 IMAGES_TO_BUILD[2]="mrheaume/sample_project_nginx;DockerNginx/;sample_project_nginx”
 
-
-
 ** Contributing **
 The project is currently verified with Shellcheck for bash compatibility (http://www.shellcheck.net/).
-Feel free to ask for aopen Pull Request if you have awesome ideas for improvements or fixes to implementbugs.
+Feel free to ask for a Pull Request if you have awesome ideas for improvements or fixes to bugs.
 
 ** Main repo maintainers **
 Mathieu Rhéaume <mrheaume@cortex.bz>
