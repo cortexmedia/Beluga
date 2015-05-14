@@ -19,47 +19,50 @@
   - lib/ Common functions used by the various deployment scripts.
 
 ** Usage **
-Copyright (c) 2015 Cortex (cortex.bz)
-Beluga (0.0.1-alpha). Usage :
-beluga [--build args] [--deploy args]
--b Build the docker container and push to repository.
--p Connects via ssh to remote host and pulls the images.
--d Runs the build push and pull options.
--c Connects via ssh and removed all unused tags and containers.
+
+  Copyright (c) 2015 Cortex (cortex.bz)
+  Beluga (0.0.1-alpha). Usage :
+  beluga [--build args] [--deploy args]
+  -b Build the docker container and push to repository.
+  -p Connects via ssh to remote host and pulls the images.
+  -d Runs the build push and pull options.
+  -c Connects via ssh and removed all unused tags and containers.
 
 
 ** Configuration file structure **
-Configuration related to deployment is stored in BelugaFile
+  Configuration related to deployment is stored in BelugaFile
 
-The structure used to grab all the infos related to a container is
+  The structure used to grab all the infos related to a container is
 
-* "LocalImageName;DockerFilePath;DockerImageName"
+    * "LocalImageName;DockerFilePath;DockerImageName"
 
-They are stored in a array like shown in the following example:.
+  They are stored in a array like shown in the following example:.
 
-Per example
+  Per example
 
-IMAGES_TO_BUILD[0]="mrheaume/sample_project_web;.;sample_project_web"
-IMAGES_TO_BUILD[1]="mrheaume/sample_project_db;DockerPostgres/;sample_project_db"
-IMAGES_TO_BUILD[2]="mrheaume/sample_project_nginx;DockerNginx/;sample_project_nginx”
+    IMAGES_TO_BUILD[0]="mrheaume/sample_project_web;.;sample_project_web"
+    IMAGES_TO_BUILD[1]="mrheaume/sample_project_db;DockerPostgres/;sample_project_db"
+    IMAGES_TO_BUILD[2]="mrheaume/sample_project_nginx;DockerNginx/;sample_project_nginx”
 
 ** Contributing **
-The project is currently verified with Shellcheck for bash compatibility (http://www.shellcheck.net/).
-Feel free to ask for a Pull Request if you have awesome ideas for improvements or fixes to bugs.
+
+  The project is currently verified with Shellcheck for bash compatibility (http://www.shellcheck.net/).
+  Feel free to ask for a Pull Request if you have awesome ideas for improvements or fixes to bugs.
 
 ** Main repo maintainers **
-Mathieu Rhéaume <mrheaume@cortex.bz>
 
-Copyright (c) 2015 Cortex (cortex.bz)
+  Mathieu Rhéaume <mrheaume@cortex.bz>
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+  Copyright (c) 2015 Cortex (cortex.bz)
 
-    http://www.apache.org/licenses/LICENSE-2.0
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
