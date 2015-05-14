@@ -1,4 +1,6 @@
-**Beluga Deploy**
+![Alt text](/img/logo.png?raw=true "Beluga Logo")
+
+**Beluga**
 
 ** What it's meant to solve **
   - Run dockerfiles to build them
