@@ -1,4 +1,4 @@
-![Alt text](/img/logo.png?raw=true "Beluga Logo")
+->![Alt text](/img/logo.png?raw=true "Beluga Logo")<-
 
 **Beluga**
 
