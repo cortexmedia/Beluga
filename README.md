@@ -30,6 +30,7 @@
 
 
 **Configuration File**
+
   Configuration related to deployment is stored in BelugaFile
 
   The structure used to grab all the infos related to a container is
