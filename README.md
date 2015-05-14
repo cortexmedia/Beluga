@@ -11,6 +11,13 @@
 ** What do I need to use it **
   - A Unix compatible system with RSync, SSH, Docker Compose, and obviously, Docker..
 
+** Install for OS X Systems using Homebrew **
+  brew tap cortexmedia/beluga
+  # For stable version
+  brew install beluga
+  # For latest version
+  brew install --head beluga
+
 ** How Beluga works **
 
   - scripts/ contains all the functions used to build docker containers and deploy them
