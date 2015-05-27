@@ -19,59 +19,61 @@
 set -e
 
 set_base_directory() {
-    BASE_DIR="$(dirname "$(readlink "$0")")"
-    export BASE_DIR
+  BASE_DIR="$(dirname "$(readlink "$0")")"
+  DIR="$(cd "$(dirname "$0")" && pwd)"
+  FULL_PATH=$(echo "$DIR/$BASE_DIR")
+  BASE_DIR="$(cd $FULL_PATH && pwd)"
+  export BASE_DIR
 }
 
 show_help() {
-    echo "Copyright (c) 2015 Cortex (cortex.bz)"
-    echo "Beluga (0.0.1-alpha). Usage :"
-    echo "beluga [--build args] [--deploy args]"
-    echo "-b Build the docker container and push to repository."
-    echo "-p Connects via ssh to remote host and pulls the images."
-    echo "-d Runs the build push and pull options."
-    echo "-c Connects via ssh and removed all unused tags and containers."
+  echo "Copyright (c) 2015 Cortex (cortex.bz)"
+  echo "Beluga (0.0.1-alpha). Usage :"
+  echo "beluga [--build args] [--deploy args]"
+  echo "-b Build the docker container and push to repository."
+  echo "-p Connects via ssh to remote host and pulls the images."
+  echo "-d Runs the build push and pull options."
+  echo "-c Connects via ssh and removed all unused tags and containers."
 }
 
 ####################
 # MAIN APP RUNTIME #
 ####################
 set_base_directory
-
 for i in "$@"
 do
-case $i in
-  -b|-b=*|--build|--build=*)
-    "$BASE_DIR/../scripts/BuildAndPush.sh"
-    exit 0
-    shift
-    ;;
-  -p=*|-p|--pull|--pull=*)
-    "$BASE_DIR/../scripts/Pull.sh"
-    exit 0
-    shift
-    ;;
-  -c|-c=*|--clean|--clean=*)
-    "$BASE_DIR/../scripts/Clean.sh"
-    exit 0
-    shift
-    ;;
-  -d=*|-d|--deploy|--deploy=*)
-    "$BASE_DIR/../scripts/BuildAndPush.sh"
-    if [ $? -ne 0 ]; then
-      echo "The build failed."
-      exit 1
-    else
+  case $i in
+    -b|-b=*|--build|--build=*)
+      "$BASE_DIR/../scripts/BuildAndPush.sh"
+      exit 0
+      shift
+      ;;
+    -p=*|-p|--pull|--pull=*)
       "$BASE_DIR/../scripts/Pull.sh"
-    fi
-    exit 0
-    shift
-    ;;
-  *)
-    show_help
-    exit 0
-    ;;
-esac
+      exit 0
+      shift
+      ;;
+    -c|-c=*|--clean|--clean=*)
+      "$BASE_DIR/../scripts/Clean.sh"
+      exit 0
+      shift
+      ;;
+    -d=*|-d|--deploy|--deploy=*)
+      "$BASE_DIR/../scripts/BuildAndPush.sh"
+      if [ $? -ne 0 ]; then
+        echo "The build failed."
+        exit 1
+      else
+        "$BASE_DIR/../scripts/Pull.sh"
+      fi
+      exit 0
+      shift
+      ;;
+    *)
+      show_help
+      exit 0
+      ;;
+  esac
 done
 
 show_help
