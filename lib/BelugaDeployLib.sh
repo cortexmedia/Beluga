@@ -78,6 +78,22 @@ rotate_containers() {
 }
 
 #############################################
+# Function: info_output()                   #
+# Description : Output a info text in green #
+# background.                               #
+#############################################
+# Arg 1 : Text to output as info            #
+#############################################
+info_output() {
+  if [ -z "$1" ]
+  then
+    echo "YOU NEED TO PASS ME A TEXT"
+  else
+    echo "$(tput setaf 2)INFO: $1 $(tput sgr 0)"
+  fi
+}
+
+#############################################
 # Function: run_ssh_command()               #
 # Description : Run a command over ssh with #
 # Configuration settings                    #
@@ -90,7 +106,11 @@ run_ssh_command() {
     echo "YOU NEED TO SPECIFY A SSH COMMAND"
     exit 1
   else
-    ssh "$DOCKER_USER@$SERVER_IP" $1
+      for i in "${SERVER_IP[@]}"
+      do
+        info_output "SSH $i - $1"
+        ssh "$DOCKER_USER@$i" $1
+      done
   fi
 }
 
@@ -117,7 +137,11 @@ pull_docker_image() {
 #               target machine              #
 #############################################
 sync_app_files() {
-  rsync -r -v . "$SERVER_USER@$SERVER_IP:$APP_DIRECTORY"
+      for i in "${SERVER_IP[@]}"
+      do
+        info_output "RSYNC $i"
+        rsync -r . "$SERVER_USER@$i:$APP_DIRECTORY"
+      done
 }
 
 ##################################################################
@@ -150,6 +174,7 @@ build_docker_image() {
     echo "You need to specify a container name and receipe folder"
     exit 1
   else
+    info_output "Docker build $1 $2"
     docker build -t "$1" "$2"
     if [ $? -ne 0 ]; then
       echo "Docker build failed. Check your stuff mang or ask Chuck Norris"
@@ -174,6 +199,7 @@ tag_docker_image() {
     echo "You need to specify a container name and tag name"
     exit 1
   else
+    info_output "Docker tag $1 $2"
     docker tag -f "$1" "$2"
     if [ $? -ne 0 ]; then
       echo "Docker tag failed. Check your stuff mang or ask Chuck Norris."
@@ -197,6 +223,7 @@ push_docker_image() {
     echo "You need to specify a container name and repository"
     exit 1
   else
+    info_output "Docker push $1 $2"
     docker push "$1/$2"
     if [ $? -ne 0 ]; then
       echo "Docker push failed. Check your stuff mang or ask Chuck Norris."

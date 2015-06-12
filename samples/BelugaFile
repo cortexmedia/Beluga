@@ -29,11 +29,22 @@ REPOSITORY_URL="mydocker.repository.ca:8080"
 #######################################################################
 APP_DIRECTORY="/home/ubuntu/sample_app_directory"
 DOCKER_COMPOSE_FILE="docker-compose-production.yml"
-SERVER_IP="99.999.99.99"
 # User to RSync with
 SERVER_USER="ubuntu"
 # User that runs docker-compose & containers
 DOCKER_USER="ubuntu"
+
+#######################################################################
+# List of servers to deploy
+#######################################################################
+# Single server deployment (OLD Version)
+# SERVER_IP="99.999.99.99"
+#######################################################################
+# Multiple server deployment (New Format)
+#######################################################################
+declare -a SERVER_IP
+SERVER_IP[0]="99.999.99.99"
+SERVER_IP[1]="22.222.22.22"
 
 #######################################################################
 # Docker specific settings.
