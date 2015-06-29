@@ -19,7 +19,11 @@
 #########################################################################
 set -e
 
-. "./BelugaFile"
+if [ -z "$BELUGA_FILE" ]; then
+  . "./BelugaFile"
+else
+  . "$BELUGA_FILE"
+fi
 . "$BASE_DIR/../lib/BelugaDeployLib.sh"
 
 ####################
