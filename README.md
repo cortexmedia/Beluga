@@ -28,11 +28,13 @@
 
     Copyright (c) 2015 Cortex (cortex.bz)
     Beluga (0.0.1-alpha). Usage :
-    beluga [--build args] [--deploy args]
+    beluga [--build args] [--deploy args] [options]
     -b Build the docker container and push to repository.
     -p Connects via ssh to remote host and pulls the images.
     -d Runs the build push and pull options.
     -c Connects via ssh and removed all unused tags and containers.
+    Options:
+    -f path/to/BelugaFile Specify the BelugaFile to use.
 
 
 **Configuration File**
