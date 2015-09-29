@@ -6,12 +6,13 @@ We've decided to create Beluga in order to fix a very common problem that is the
 
 ### **Why you no use Kubernetes or Mesus?**
 
- - Currently Docker doesn't support Multi-Tenant environements
- - Therefore, neither Kubernetes and Mesos do from the docker/container layer...
- - Many actual issues : 
- - ```#2918 (PR: #4572) (container root is identical to host root -- volumes can be written and read from as host root inside container).```
+- Currently Docker doesn't support Multi-Tenant environements
+- Therefore, neither Kubernetes and Mesos do from the docker/container layer...
+- Many actual issues : 
+- ```#2918 (PR: #4572) (container root is identical to host root -- volumes can be written and read from as host root inside container).```
 - (WIP) Docker doesn't have any ACL. Writing to docker.sock == root.
 -    ```#5619 (PR: #6000) (absolute symlinks and symlink path components copy host target).```
+
 ### **What Beluga Doesn't Do?**
 - Down-to-distro cluster managements
 - Docker registry or app management itself
@@ -29,13 +30,16 @@ We've decided to create Beluga in order to fix a very common problem that is the
   - Docker Compose
   - Obviously, Docker..
   - Some love.
+
 # **Install for OS X Systems using Homebrew**
 
     brew tap cortexmedia/beluga
     
-  ### Stable version
+### Stable version
+  
      brew install beluga
-  ### Latest version
+### Latest version
+  
      brew install --head beluga
 
 #### **How Beluga works**
@@ -57,18 +61,20 @@ We've decided to create Beluga in order to fix a very common problem that is the
 
 ##### **Configuration File**
 
-  Configuration related to deployment is stored in BelugaFile.
+Configuration related to deployment is stored in BelugaFile.
 
-  The structure used to grab all the infos related to a container is
+The structure used to grab all the infos related to a container is
 
-```LocalImageName;DockerFilePath;DockerImageName```
+    LocalImageName;DockerFilePath;DockerImageName
 
-  They are stored in a array like shown in the following example:
+They are stored in a array like shown in the following example:
 
     IMAGES_TO_BUILD[0]="mrheaume/sample_project_web;.;sample_project_web"
     IMAGES_TO_BUILD[1]="mrheaume/sample_project_db;DockerPostgres/;sample_project_db"
     IMAGES_TO_BUILD[2]="mrheaume/sample_project_nginx;DockerNginx/;sample_project_nginx”
+    
 ### **Sample Docker Project with Docker Compose**
+
     # docker-compose.yml 
     web:
         image: my_repository:8080/my-awesome-app 
@@ -90,7 +96,7 @@ We've decided to create Beluga in order to fix a very common problem that is the
 
   Mathieu Rhéaume <mrheaume@cortex.bz>
 
-  **Copyright (c) 2015 Cortex (cortex.bz)**
+  **Copyright (c) 2015 Cortex (http://cortex.bz)**
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
