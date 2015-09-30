@@ -4,7 +4,7 @@
 ### **Intro**
 We've decided to create Beluga in order to fix a very common problem that is the complexity of multi-tenants Docker installations. Indeed, Beluga enables you to quickly draft deployment scripts that will provide you with all the flexibility needed to quickly launch new projects using Docker. With Beluga, pre-setups are a thing of the past, the kickoff phase becomes extremely short which is an enourmous gain if you need to work with multiple clients/projects. Beluga has no run-time requirements for Linux operating machines and has pretty much no specific requirements outside of actially having Docker installed. Beluga also support private repositories without the need to use Docker Hub. 
 
-### **Why you no use Kubernetes or Mesus?**
+### **Why you no use Kubernetes or Mesos?**
 
 - Currently Docker doesn't support Multi-Tenant environements
 - Therefore, neither Kubernetes and Mesos do from the docker/container layer...
