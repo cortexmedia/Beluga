@@ -85,7 +85,8 @@ They are stored in a array like shown in the following example:
         - nginx
     redis:
         image: my_repository:8080/redis
-        nginx: image: nginx:latest
+    nginx: 
+        image: nginx:latest
         
 ### **Contributing**
 
