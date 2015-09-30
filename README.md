@@ -1,4 +1,5 @@
-![Alt text](/img/logo.png?raw=true "Beluga Cortex")
+![Alt text](/img/logo.png?raw=true "Beluga Docker Deployment Tool")
+
 
 # **Beluga**
 ### **Intro**
@@ -102,7 +103,7 @@ They are stored in a array like shown in the following example:
 
   Mathieu Rhéaume <mrheaume@cortex.bz>
 
-  **Copyright (c) 2015 Cortex (http://cortex.bz)**
+  **Copyright (c) 2015 [Cortex](http://cortex.bz/) ([Mobile Development Studio](http://cortex.bz/))**
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
