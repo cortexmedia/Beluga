@@ -2,13 +2,17 @@
 
 # **Beluga**
 ### **Intro**
-We've decided to create Beluga in order to fix a very common problem that is the complexity of multi-tenants Docker installations. Indeed, Beluga enables you to quickly draft deployment scripts that will provide you with all the flexibility needed to quickly launch new projects using Docker. With Beluga, pre-setups are a thing of the past, the kickoff phase becomes extremely short which is an enourmous gain if you need to work with multiple clients/projects. Beluga has no run-time requirements for Linux operating machines and has pretty much no specific requirements outside of actially having Docker installed. Beluga also support private repositories without the need to use Docker Hub. 
+We've decided to create Beluga in order to fix a very common problem that is the complexity of multi-tenants Docker installations. Indeed, Beluga enables you to quickly draft deployment scripts that will provide you with all the flexibility needed to quickly launch new projects using Docker.
 
-### **Why you no use Kubernetes or Mesos?**
+With Beluga, pre-setups are a thing of the past, the kickoff phase becomes extremely short which is an enormous gain if you need to work with multiple clients/projects.
 
-- Currently Docker doesn't support Multi-Tenant environements
+Beluga has no run-time requirements for Linux operating machines and has pretty much no specific requirements outside of actually having Docker installed. Beluga also support private repositories without the need to use Docker Hub.
+
+### **Why Don't You Use Kubernetes or Mesos?**
+
+- Currently Docker doesn't support Multi-Tenant environments
 - Therefore, neither Kubernetes and Mesos do from the docker/container layer...
-- Many actual issues : 
+- Many actual issues :
 - ```#2918 (PR: #4572) (container root is identical to host root -- volumes can be written and read from as host root inside container).```
 - (WIP) Docker doesn't have any ACL. Writing to docker.sock == root.
 -    ```#5619 (PR: #6000) (absolute symlinks and symlink path components copy host target).```
@@ -18,7 +22,8 @@ We've decided to create Beluga in order to fix a very common problem that is the
 - Docker registry or app management itself
 - Magic service discovery
 - Infrastructure management
-### **How is it working?**
+
+### **How Beluga Works?**
   - Run dockerfiles to build them
   - Push them to repository
   - Pull them when connected to server by ssh
@@ -26,30 +31,30 @@ We've decided to create Beluga in order to fix a very common problem that is the
 
 ### **Requirements**
   - A Unix compatible system with RSync
-  - SSH 
+  - SSH
   - Docker Compose
-  - Obviously, Docker..
-  - Some love.
+  - Obviously, Docker...
+  - Some love
 
 # **Install for OS X Systems using Homebrew**
 
     brew tap cortexmedia/beluga
-    
+
 ### Stable version
-  
+
      brew install beluga
 ### Latest version
-  
+
      brew install --head beluga
 
-#### **How Beluga works**
+#### **How is Beluga Structured**
   - *scripts/* contains all the functions used to build docker containers and deploy them
   - *bin/beluga* Contains the CLI to call the various scripts.
   - *sample/* Example of BelugaFile.
   - *lib/* Common functions used by the various deployment scripts.
 
 #### **Usage**
-    
+
     beluga [--build args] [--deploy args] [options]
     -b Build the docker container and push to repository.
     -p Connects via ssh to remote host and pulls the images.
@@ -72,12 +77,12 @@ They are stored in a array like shown in the following example:
     IMAGES_TO_BUILD[0]="mrheaume/sample_project_web;.;sample_project_web"
     IMAGES_TO_BUILD[1]="mrheaume/sample_project_db;DockerPostgres/;sample_project_db"
     IMAGES_TO_BUILD[2]="mrheaume/sample_project_nginx;DockerNginx/;sample_project_nginx”
-    
+
 ### **Sample Docker Project with Docker Compose**
 
-    # docker-compose.yml 
+    # docker-compose.yml
     web:
-        image: my_repository:8080/my-awesome-app 
+        image: my_repository:8080/my-awesome-app
     ports:
         - "5000:5000"
     links:
@@ -85,9 +90,9 @@ They are stored in a array like shown in the following example:
         - nginx
     redis:
         image: my_repository:8080/redis
-    nginx: 
+    nginx:
         image: nginx:latest
-        
+
 ### **Contributing**
 
   The project is currently verified with Shellcheck for bash compatibility (http://www.shellcheck.net/).
