@@ -101,9 +101,9 @@ They are stored in a array like shown in the following example:
 
 ### **Main Contributors**
 
-  Mathieu Rhéaume <mrheaume@cortex.bz>
+  Mathieu Rhéaume <mrheaume@cortexstudio.com>
 
-  **Copyright (c) 2015 [Cortex](http://cortex.bz/) ([Mobile Development Studio](http://cortex.bz/))**
+  **Copyright (c) 2017 [Cortex](http://cortexstudio.com/) ([Mobile Development Studio](http://cortexstudio.com/))**
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
